@@ -1,0 +1,23 @@
+name: Validate Premium Gildara
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  build-and-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Validate contracts and compile all three services
+        run: bun run check
+      - name: Secret-pattern scan
+        run: |
+          if grep -ERn '(sk_live_[A-Za-z0-9]{10,}|whsec_[A-Za-z0-9]{10,}|postgres(ql)?://[^[:space:]]+)' apps; then
+            echo 'Potential hardcoded credentials detected' >&2
+            exit 1
+          fi
