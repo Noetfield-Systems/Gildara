@@ -1,0 +1,17 @@
+{
+  "name": "gildara",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "bun@1.4.4",
+  "scripts": {
+    "dev:web": "bun --watch apps/web/index.tsx",
+    "dev:terminal": "bun --watch apps/terminal/index.tsx",
+    "dev:commerce": "bun --watch apps/commerce/index.tsx",
+    "build:web": "bun build apps/web/index.tsx --target=bun --outdir=.build/web",
+    "build:terminal": "bun build apps/terminal/index.tsx --target=bun --outdir=.build/terminal",
+    "build:commerce": "bun build apps/commerce/index.tsx --target=bun --outdir=.build/commerce",
+    "build:all": "bun run build:web && bun run build:terminal && bun run build:commerce",
+    "test": "bun test tests/contracts.test.ts",
+    "check": "bun run test && bun run build:all"
+  }
+}
