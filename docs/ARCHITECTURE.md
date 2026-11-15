@@ -9,7 +9,7 @@
 | Metals commerce + operations | `apps/commerce` | `gildara-commerce` | `gildara-commerce-production.up.railway.app` | `GET /health` |
 | PostgreSQL | managed Railway service | `Postgres` | internal network | DB connection |
 
-The services are deployed as Bun Railway Functions as of initial import. The app source is mirrored into this repo; a change in GitHub does **not** automatically change production until existing Railway services are reconnected to this repository and deployment checks pass.
+The three existing app services are connected to this repository on `main` with service-specific Railway root directories (`/apps/web`, `/apps/terminal`, `/apps/commerce`) and `bun run start`. The shared PostgreSQL instance, Railway project and three public hostnames are preserved. Service-specific watch patterns limit automatic deploys to relevant app code and package changes. GitHub CI validates all three entrypoints before code merges; Railway independently builds and health-checks deployments. Confirm the live deployment status before claiming a release.
 
 ## Data flows
 
@@ -28,5 +28,8 @@ User -> public site -> waitlist and research API -> PostgreSQL. Terminal uses sa
 Store all service secrets in Railway Variables; never in this public repository. `GILDARA_ADMIN_TOKEN` is required for the operator desk, and HTTPS-only authenticated research sessions are maintained by the web API. Stripe webhook signatures are verified server-side. PII access is confined to authenticated members and the operator desk. Commercial enquiries have their own deletion path.
 
 ## Release
+
+GitHub PR #1 bootstrapped the monorepo from live Railway source; the GitHub publication is not evidence of a client order, subscription payment, broker connection, or custody relationship.
+
 
 Run `bun run check`. Deploy each existing service from its path; retain `DATABASE_URL`/Railway Postgres reference and independent service domains. Verify `GET /api/health`, `GET /health`, protected operator `401`, and POST commerce `/smoke`. No public business revenue should be inferred from synthetic tests or illustrative calculations.
